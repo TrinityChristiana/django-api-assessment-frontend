@@ -15,8 +15,8 @@ const AuthContext = createContext();
 AuthContext.displayName = 'AuthContext'; // Context object accepts a displayName string property. React DevTools uses this string to determine what to display for the context. https://reactjs.org/docs/context.html#contextdisplayname
 
 const AuthProvider = (props) => {
-  const [user, setUser] = useState(null);
-  const [oAuthUser, setOAuthUser] = useState(null);
+  const [user, setUser] = useState({});
+  const [oAuthUser, setOAuthUser] = useState({});
 
   // there are 3 states for the user:
   // null = application initial state, not yet loaded
@@ -36,11 +36,11 @@ const AuthProvider = (props) => {
         setOAuthUser(fbUser);
         checkUser(fbUser.uid).then((gamerInfo) => {
           let userObj = {};
-          if ('null' in gamerInfo) {
-            userObj = gamerInfo;
-          } else {
-            userObj = { fbUser, uid: fbUser.uid, ...gamerInfo };
-          }
+          // if ('null' in gamerInfo) {
+          //   userObj = gamerInfo;
+          // } else {
+          //   userObj = { fbUser, uid: fbUser.uid, ...gamerInfo };
+          // }
           setUser(userObj);
         });
       } else {
