@@ -16,7 +16,7 @@ AuthContext.displayName = 'AuthContext'; // Context object accepts a displayName
 
 const AuthProvider = (props) => {
   const [user, setUser] = useState({});
-  const [oAuthUser, setOAuthUser] = useState({});
+  const [oAuthUser, setOAuthUser] = useState(null);
 
   // there are 3 states for the user:
   // null = application initial state, not yet loaded
@@ -33,16 +33,16 @@ const AuthProvider = (props) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((fbUser) => {
       if (fbUser) {
-        setOAuthUser(fbUser);
-        checkUser(fbUser.uid).then((gamerInfo) => {
-          let userObj = {};
-          // if ('null' in gamerInfo) {
-          //   userObj = gamerInfo;
-          // } else {
-          //   userObj = { fbUser, uid: fbUser.uid, ...gamerInfo };
-          // }
-          setUser(userObj);
-        });
+        setOAuthUser({fbUser});
+        // checkUser(fbUser.uid).then((gamerInfo) => {
+        //   let userObj = {};
+        //   // if ('null' in gamerInfo) {
+        //   //   userObj = gamerInfo;
+        //   // } else {
+        //   //   userObj = { fbUser, uid: fbUser.uid, ...gamerInfo };
+        //   // }
+        //   setUser(userObj);
+        // });
       } else {
         setOAuthUser(false);
         setUser(false);
@@ -53,9 +53,9 @@ const AuthProvider = (props) => {
   const value = useMemo(
     // https://reactjs.org/docs/hooks-reference.html#usememo
     () => ({
-      user,
+      user: oAuthUser,
       updateUser,
-      userLoading: user === null || oAuthUser === null,
+      userLoading: oAuthUser === null /*  || user === null */ ,
       // as long as user === null, will be true
       // As soon as the user value !== null, value will be false
     }),
